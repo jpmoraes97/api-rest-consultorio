@@ -29,8 +29,8 @@ public class PacienteService {
 	}
 	
 	public Paciente salvar(Paciente paciente) {
-		paciente.getResponsaveis().stream().forEach(r -> r.setPaciente(paciente));
-		paciente.getTelefones().stream().forEach(t -> t.setPaciente(paciente));
+		paciente.getResponsaveis().forEach(r -> r.setPaciente(paciente));
+		paciente.getTelefones().forEach(t -> t.setPaciente(paciente));
 		return pacienteRepository.save(paciente);
 	}
 	
@@ -39,7 +39,16 @@ public class PacienteService {
 		if(entity == null) {
 			throw new ResourceNotFoundException("Paciente com ID : " +id+ " não foi localizado!");
 		}
-		BeanUtils.copyProperties(paciente, entity, "id");
+		entity.getResponsaveis().clear();
+		entity.getResponsaveis().addAll(paciente.getResponsaveis());
+		entity.getResponsaveis().forEach(r -> r.setPaciente(entity));
+		
+		entity.getTelefones().clear();
+		entity.getTelefones().addAll(paciente.getTelefones());
+		entity.getTelefones().forEach(t -> t.setPaciente(entity));
+		
+		
+		BeanUtils.copyProperties(paciente, entity, "id", "responsaveis", "telefones");
 		pacienteRepository.save(entity);
 		return entity;
 	}

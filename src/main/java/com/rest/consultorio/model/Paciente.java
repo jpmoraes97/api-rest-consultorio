@@ -47,12 +47,12 @@ public class Paciente implements Serializable {
 	private Endereco endereco;	
 	
 	@JsonIgnoreProperties("paciente")
-	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Telefone> telefones;
 	
 	
 	@JsonIgnoreProperties("paciente")
-	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Responsavel> responsaveis;
 	
 }
